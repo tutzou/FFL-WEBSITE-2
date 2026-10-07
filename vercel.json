@@ -1,5 +1,10 @@
 {
   "functions": {
-    "api/admin.js": { "runtime": "nodejs22.x" }
+    "api/admin.js": {
+      "runtime": "nodejs20.x"
+    },
+    "api/config.js": {
+      "runtime": "nodejs20.x"
+    }
   }
 }
