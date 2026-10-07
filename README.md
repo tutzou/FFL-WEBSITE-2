@@ -1,47 +1,26 @@
-# FFL — version Supabase Realtime
+# FFL — version finale Supabase Realtime
 
-Cette version supprime le rafraîchissement automatique de la page. Les données globales passent par Supabase et les navigateurs écoutent Supabase Realtime.
+## IMPORTANT
+1. Téléverse **tout le contenu** de ce ZIP dans le dépôt GitHub, en gardant le dossier `assets/` et le dossier `api/`.
+2. Dans Supabase > SQL Editor, exécute **tout** `supabase.sql`.
+3. Dans Vercel > Settings > Environment Variables, ajoute pour Production, Preview et Development :
+   - `SUPABASE_URL`
+   - `SUPABASE_PUBLISHABLE_KEY`
+   - `SUPABASE_SERVICE_ROLE_KEY`
+   - `ADMIN_PASSWORD`
+4. Fais ensuite un **nouveau déploiement** Vercel. Les nouvelles variables ne sont pas appliquées à un ancien déploiement.
 
-## 1. Supabase
+Le navigateur ne reçoit jamais la service role key. Les écritures admin passent par `/api/admin` puis Supabase. Les visiteurs lisent Supabase avec la clé publique et écoutent Realtime.
 
-Dans **Supabase → SQL Editor**, exécute entièrement le fichier `supabase.sql`.
-
-Il crée/complète :
-- `ffl_admin_state` — maintenance, breaking news, annonce globale
-- `ffl_admin_logs` — journal admin
-- `ffl_standings` — classement A à F
-- `ffl_matches` — résultats de matchs
-- `fyfl_stats` — buteurs et passeurs
-
-Realtime est activé pour ces 5 tables.
-
-## 2. Vercel
-
-Dans **Project → Settings → Environment Variables**, ajoute :
-
-- `SUPABASE_URL` = URL de ton projet Supabase
-- `SUPABASE_PUBLISHABLE_KEY` = clé Publishable/anon de Supabase
-- `SUPABASE_SERVICE_ROLE_KEY` = clé service_role de Supabase
-- `ADMIN_PASSWORD` = `93240`
-
-**Ne mets jamais `SUPABASE_SERVICE_ROLE_KEY` dans `script.js` ou dans GitHub.**
-
-Après les variables, fais un nouveau déploiement Vercel.
-
-## 3. Ce qui est maintenant en direct
-
+### Temps réel
 - classement
-- résultats de matchs
+- résultats
+- STATS buteurs/passeurs
 - breaking news
 - annonce globale
-- maintenance globale
+- maintenance
 - journal admin
-- STATS buteurs/passeurs
-- compteur de personnes connectées avec Supabase Presence
+- compteur de connectés avec Supabase Presence
 
-Une action admin écrit dans Supabase. Supabase Realtime prévient ensuite les navigateurs concernés. Le site ne recharge pas la page toutes les secondes.
-
-## 4. Connexion Supabase côté navigateur
-
-Le navigateur récupère uniquement `SUPABASE_URL` et la clé publique via `/api/config`.
-La clé service_role reste uniquement dans `/api/admin.js` côté serveur.
+### Logos
+Tous les logos FFL et les 24 logos d'équipes sont inclus dans `/assets/` et sont référencés avec des chemins absolus `/assets/...` pour fonctionner aussi après navigation sur le site.

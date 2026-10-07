@@ -14,12 +14,12 @@ const groups = {
   E:["Grèce","Angleterre","États Unis","Madagascar"], F:["Comores","Maroc","France","Canada"]
 };
 const teamLogo = {
-  "Pays Bas":"assets/team-A1.png","Italie":"assets/team-A2.png","Uruguay":"assets/team-A3.png","Égypte":"assets/team-A4.png",
-  "Espagne":"assets/team-B1.png","Argentine":"assets/team-B2.png","Croatie":"assets/team-B3.png","Norvège":"assets/team-B4.png",
-  "Algérie":"assets/team-C1.png","Colombie":"assets/team-C2.png","Allemagne":"assets/team-C3.png","Belgique":"assets/team-C4.png",
-  "Sénégal":"assets/team-D1.png","Japon":"assets/team-D2.png","Tunisie":"assets/team-D3.png","Brésil":"assets/team-D4.png",
-  "Grèce":"assets/team-E1.png","Angleterre":"assets/team-E2.png","États Unis":"assets/team-E3.png","Madagascar":"assets/team-E4.png",
-  "Comores":"assets/team-F1.png","Maroc":"assets/team-F2.png","France":"assets/team-F3.png","Canada":"assets/team-F4.png"
+  "Pays Bas":"/assets/team-A1.png","Italie":"/assets/team-A2.png","Uruguay":"/assets/team-A3.png","Égypte":"/assets/team-A4.png",
+  "Espagne":"/assets/team-B1.png","Argentine":"/assets/team-B2.png","Croatie":"/assets/team-B3.png","Norvège":"/assets/team-B4.png",
+  "Algérie":"/assets/team-C1.png","Colombie":"/assets/team-C2.png","Allemagne":"/assets/team-C3.png","Belgique":"/assets/team-C4.png",
+  "Sénégal":"/assets/team-D1.png","Japon":"/assets/team-D2.png","Tunisie":"/assets/team-D3.png","Brésil":"/assets/team-D4.png",
+  "Grèce":"/assets/team-E1.png","Angleterre":"/assets/team-E2.png","États Unis":"/assets/team-E3.png","Madagascar":"/assets/team-E4.png",
+  "Comores":"/assets/team-F1.png","Maroc":"/assets/team-F2.png","France":"/assets/team-F3.png","Canada":"/assets/team-F4.png"
 };
 const initial = {
   A:[["Pays Bas",3,1,1,0,0,7,0],["Italie",3,1,1,0,0,5,0],["Uruguay",0,1,0,0,1,0,5],["Égypte",0,1,0,0,1,0,7]],
@@ -63,7 +63,7 @@ function renderStandings(data=standings){
 function renderMatches(){
   const root=$("recentMatches"); if(!root)return;
   const list=[...matches].sort((a,b)=>new Date(b.created_at||0)-new Date(a.created_at||0)).slice(0,12);
-  root.innerHTML=list.length?list.map(m=>`<article class="match-card"><span class="match-group">GROUPE ${esc(m.group_name)}</span><div class="match-team"><img src="${teamLogo[m.home_team]||"assets/ffl.png"}" alt=""><b>${esc(m.home_team)}</b><strong>${m.home_score} — ${m.away_score}</strong><b>${esc(m.away_team)}</b><img src="${teamLogo[m.away_team]||"assets/ffl.png"}" alt=""></div><small>${new Date(m.created_at||Date.now()).toLocaleString("fr-FR")}</small></article>`).join(""):"<div class='log-empty'>Aucun résultat enregistré.</div>";
+  root.innerHTML=list.length?list.map(m=>`<article class="match-card"><span class="match-group">GROUPE ${esc(m.group_name)}</span><div class="match-team"><img src="${teamLogo[m.home_team]||"/assets/ffl.png"}" alt=""><b>${esc(m.home_team)}</b><strong>${m.home_score} — ${m.away_score}</strong><b>${esc(m.away_team)}</b><img src="${teamLogo[m.away_team]||"/assets/ffl.png"}" alt=""></div><small>${new Date(m.created_at||Date.now()).toLocaleString("fr-FR")}</small></article>`).join(""):"<div class='log-empty'>Aucun résultat enregistré.</div>";
 }
 function renderStats(){
   const make=(category,id,label)=>{const root=$(id);if(!root)return;const rows=stats.filter(s=>s.category===category).sort((a,b)=>(+b.value||0)-(+a.value||0)).slice(0,15);root.innerHTML=rows.length?rows.map((s,i)=>`<div class="stat-row"><b>${i+1}</b>${s.club_logo_url?`<img src="${esc(s.club_logo_url)}" alt="">`:``}<div><strong>${esc(s.player_name)}</strong><small>${esc(s.club)}</small></div><span>${+s.value||0} ${label}</span></div>`).join(""):"<div class='log-empty'>Aucun joueur enregistré.</div>";};
@@ -151,7 +151,7 @@ async function initSupabase(){
   try{
     let config=null;
     if(location.protocol!=="file:"){
-      const response=await fetch("/api/config",{cache:"no-store"});
+      const response=await fetch('/api/config?ts='+Date.now(),{cache:'no-store'});
       if(response.ok)config=await response.json();
     }
     const url=config?.url || FFL_CONFIG.SUPABASE_URL;
